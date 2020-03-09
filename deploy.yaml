@@ -1,0 +1,73 @@
+---
+- name: Install/update t1m1
+  hosts: all
+  vars:
+    owner: sysadm
+    group: sysadm
+    dest: /opt
+    path: IknowU
+  tasks:
+    - name: System - Set hostname
+      become: true
+      hostname:
+        name: '{{ inventory_hostname }}'
+      tags: hostname
+    - name: Filesystem - Create work directory (if it does not exist)
+      become: true
+      file:
+        path: "{{ dest }}/{{ path }}"
+        state: directory
+        mode: '0775'
+        owner: "{{ owner }}"
+        group: "{{ group }}"
+      tags: filesystem
+    - name: APT - Update all packages
+      become: true
+      apt:
+        force_apt_get: yes
+        cache_valid_time: 3600
+        upgrade: dist
+        autoremove: yes
+        autoclean: yes
+      tags: dist-upgrade
+    - name: APT - Install dependencies
+      become: true
+      apt:
+        package: [
+          python3,
+          python3-pip
+        ]
+        state: present
+        force_apt_get: yes
+        update_cache: yes
+      tags: apt
+    - name: pip - Install dependencies
+      become: true
+      pip:
+        name: [
+          numpy==1.17.5,
+          tensor2tensor==1.14.1,
+          tensorboard==2.1.1,
+          tensorflow==2.1.0,
+          tensorflow-datasets==2.0.0,
+          tensorflow-estimator==2.1.0,
+          tensorflow-gan==2.0.0,
+          tensorflow-hub==0.7.0,
+          tensorflow-metadata==0.21.1,
+          tensorflow-privacy==0.2.2,
+          tensorflow-probability==0.7.0,
+          Pillow==6.2.2,
+          Keras==2.2.5,
+          Keras-Applications==1.0.8,
+          Keras-Preprocessing==1.1.0,
+          keras-vis==0.4.1
+        ]
+        state: present
+      tags: pip
+    - name: rsync - Copy files
+      synchronize:
+        src: .
+        dest: "{{ dest }}"
+        delete: yes
+        dirs: yes
+      tags: sync
