@@ -11,10 +11,18 @@ change-log: Check CHANGELOG.md file.
 """
 
 import os
-import tensorflow as tf  # pylint: disable=import-error
-# import keras_preprocessing  # pylint: disable=import-error
-# from keras_preprocessing import image  # pylint: disable=import-error
-from keras_preprocessing.image import ImageDataGenerator  # pylint: disable=import-error
+import contextlib
+import json
+
+# 0 = all messages are logged (default behavior)
+# 1 = INFO messages are not printed
+# 2 = INFO and WARNING messages are not printed
+# 3 = INFO, WARNING, and ERROR messages are not printed
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
+with contextlib.redirect_stdout(None):
+    import tensorflow as tf  # pylint: disable=import-error
+    from keras_preprocessing.image import ImageDataGenerator  # pylint: disable=import-error
 
 
 class Train():
@@ -22,7 +30,7 @@ class Train():
     description:
     """
 
-    __version__ = 0.01
+    __version__ = 0.02
 
     def __init__(self):
         self.__directory = None
@@ -85,20 +93,30 @@ class Train():
                 input_shape=(150, 150, 3)),
             tf.keras.layers.MaxPooling2D(2, 2),
             # The second convolution
-            tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
+            tf.keras.layers.Conv2D(
+                64, (3, 3),
+                activation='relu'),
             tf.keras.layers.MaxPooling2D(2, 2),
             # The third convolution
-            tf.keras.layers.Conv2D(128, (3, 3), activation='relu'),
+            tf.keras.layers.Conv2D(
+                128, (3, 3),
+                activation='relu'),
             tf.keras.layers.MaxPooling2D(2, 2),
             # The fourth convolution
-            tf.keras.layers.Conv2D(128, (3, 3), activation='relu'),
+            tf.keras.layers.Conv2D(
+                128, (3, 3),
+                activation='relu'),
             tf.keras.layers.MaxPooling2D(2, 2),
             # Flatten the results to feed into a DNN
             tf.keras.layers.Flatten(),
             tf.keras.layers.Dropout(0.5),
             # 512 neuron hidden layer
-            tf.keras.layers.Dense(512, activation='relu'),
-            tf.keras.layers.Dense(3, activation='softmax')])
+            tf.keras.layers.Dense(
+                512,
+                activation='relu'),
+            tf.keras.layers.Dense(
+                3,
+                activation='softmax')])
         self.__model.compile(
             loss='categorical_crossentropy',
             optimizer='rmsprop',
@@ -119,16 +137,14 @@ class Train():
             self.__generator_training,
             epochs=25,
             validation_data=self.__generator_evaluate,
-            verbose=1)
-        print(history.history)
-        print('accuracy')
-        print(history.history['accuracy'])
-        print('val_accuracy')
-        print(history.history['val_accuracy'])
-        print('loss')
-        print(history.history['loss'])
-        print('val_loss')
-        print(history.history['val_loss'])
-        print('epocs')
-        print(range(len(history.history['accuracy'])))
+            verbose=True)
         self._save()
+        history_str = str(history.history).replace('\'', '"')
+        history_dic = json.loads(history_str)
+        return \
+            {
+                'results': {
+                    'history': history_dic,
+                    'epocs': len(history.history['accuracy'])
+                }
+            }

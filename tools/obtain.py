@@ -19,7 +19,7 @@ class Obtain():
     description:
     """
 
-    __version__ = 0.01
+    __version__ = 0.02
 
     def __init__(self):
         self.__name = None
@@ -120,7 +120,7 @@ class Obtain():
             path = os.path.join(self.__src_dir, i)
             if os.path.isfile(path):
                 shutil.copy(path, self.__dst_dir)
-
+        return {}
 
 def create_directory(directory):
     """

@@ -25,7 +25,7 @@ try:
     import os
     import logging
     import logging.handlers
-    # import json
+    import json
     import argparse
     from tools.config import config
 except ImportError as err:
@@ -42,8 +42,8 @@ class InowU():  # pylint: disable=too-few-public-methods,too-many-instance-attri
       http://chase-seibert.github.io/blog/
     """
 
-    __version__ = 0.01
-    __date__ = "2020-03-08"
+    __version__ = 0.02
+    __date__ = "2020-03-09"
 
     def __init__(self):
         self.__name = "iknowu.py"
@@ -133,7 +133,9 @@ class InowU():  # pylint: disable=too-few-public-methods,too-many-instance-attri
             name=args.name)
         self._check_error(status)
         self.__logger.info(step.info())
-        step.run()
+        result = step.run()
+        self._check_error(result)
+        self.__logger.info('Done')
 
     def train(self):
         """
@@ -157,7 +159,11 @@ class InowU():  # pylint: disable=too-few-public-methods,too-many-instance-attri
                 self.__config['general']['directory']))
         self._check_error(status)
         # self.__logger.info(step.info())
-        step.run()
+        result = step.run()
+        self._check_error(result)
+        print(json.dumps(result, indent=2, separators=(", ", ": ")))
+        self.__logger.info(result)
+        self.__logger.info('Done')
 
     def infer(self):
         """
@@ -183,9 +189,15 @@ class InowU():  # pylint: disable=too-few-public-methods,too-many-instance-attri
             directory=os.path.join(
                 self.__work_dir,
                 self.__config['general']['directory']),
-            picture=args.file)
+            picture=args.file,
+            people=self.__config['person'])
         self._check_error(status)
-        step.run()
+        result = step.run()['results']
+        self._check_error(result)
+        print(result['person'])
+        self.__logger.info('Person: %s', result['person'])
+        self.__logger.info('Class: %s', result['classes'])
+        self.__logger.info('Done')
 
     def _logger(self):
         _format = ' [%(process)d]: %(levelname)s: %(message)s'
