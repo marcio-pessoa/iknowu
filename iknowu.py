@@ -70,12 +70,13 @@ class InowU():  # pylint: disable=too-few-public-methods,too-many-instance-attri
                   'Contact: ' + self.__contact + '\n')
         examples = ('examples:\n' +
                     '  ' + self.__name + ' --help\n' + \
-                    '  ' + self.__name + ' -v')
+                    '  ' + self.__name + ' -v\n')
         self.version = (self.__name + " " + str(self.__version__) + " (" +
                         self.__date__ + ")")
         epilog = (examples + '\n' + footer)
         parser = argparse.ArgumentParser(
             prog=self.__name,
+            description=self.__description,
             formatter_class=argparse.RawDescriptionHelpFormatter,
             epilog=epilog,
             add_help=True,
