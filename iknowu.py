@@ -47,7 +47,7 @@ class InowU():  # pylint: disable=too-few-public-methods,too-many-instance-attri
 
     def __init__(self):
         self.__name = "iknowu.py"
-        self.__description = ""
+        self.__description = "Machine Learning image categorisation"
         self.__copyright = "Copyright (c) 2020 Marcio Pessoa"
         self.__license = "GPLv2. There is NO WARRANTY."
         self.__website = "https://github.com/marcio-pessoa/InowU"
@@ -145,6 +145,12 @@ class InowU():  # pylint: disable=too-few-public-methods,too-many-instance-attri
             prog=self.__name + ' train',
             description='Train model')
         parser.add_argument(
+            '-e', '--epochs',
+            required=False,
+            default=25,
+            type=int,
+            help='Epochs')
+        parser.add_argument(
             '-v', '--verbosity',
             required=False,
             help='DEBUG, INFO, WARNING, ERROR (default) or CRITICAL')
@@ -153,6 +159,7 @@ class InowU():  # pylint: disable=too-few-public-methods,too-many-instance-attri
         from tools.train import Train  # pylint: disable=import-outside-toplevel
         self.__logger.info('Running train...')
         step = Train()
+        step.epochs = args.epochs
         status = step.config(
             directory=os.path.join(
                 self.__work_dir,

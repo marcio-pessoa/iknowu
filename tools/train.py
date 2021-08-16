@@ -39,6 +39,7 @@ class Train():
         self.__model = None
         self.__generator_training = None
         self.__generator_evaluate = None
+        self.epochs = 25
 
     def config(self, directory=None):
         """
@@ -63,7 +64,7 @@ class Train():
         # Set data generator
         datagen_training = ImageDataGenerator(
             rescale=1/255,
-            rotation_range=90,
+            rotation_range=10,
             width_shift_range=0.2,
             height_shift_range=0.2,
             shear_range=0.2,
@@ -135,7 +136,7 @@ class Train():
         self._model()
         history = self.__model.fit(
             self.__generator_training,
-            epochs=25,
+            epochs=self.epochs,
             validation_data=self.__generator_evaluate,
             verbose=True)
         self._save()
