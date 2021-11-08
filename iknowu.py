@@ -16,8 +16,7 @@ change-log: Check CHANGELOG.md file.
 import sys
 if not (sys.version_info.major == 3 and sys.version_info.minor >= 6):
     print("This program requires Python 3.6 or higher!")
-    print("You are using Python {}.{}." .
-          format(sys.version_info.major, sys.version_info.minor))
+    print(f"You are using Python {sys.version_info.major}.{sys.version_info.minor}.")
     sys.exit(True)
 
 # Check and import modules

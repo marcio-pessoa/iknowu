@@ -16,31 +16,12 @@ def config(config_file):
     """
     description:
     """
-    try:
-        data = open(config_file, 'r')
-    except IOError as err:
-        return \
-            {
-                'error': {
-                    'message': 'Failed to read file.',
-                    'exception': str(err)
-                }
-            }
-    try:
-        data = data.read()
-        return json.loads(data)
-    except BaseException:
-        return \
-            {
-                'error': {
-                    'message': 'Can\'t parse configuration file.',
-                    'exception': ''
-                }
-            }
+    with open(config_file, 'r', encoding='UTF-8') as reader:
+        return json.loads(reader.read())
     return \
         {
             'error': {
-                'message': 'Unknown problem.',
+                'message': 'Can\'t parse configuration file.',
                 'exception': ''
             }
         }
