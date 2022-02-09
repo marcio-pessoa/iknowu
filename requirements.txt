@@ -1,3 +1,3 @@
 Keras_Preprocessing==1.1.2
 numpy==1.21.4
-tensorflow==2.7.0
+tensorflow==2.7.1
