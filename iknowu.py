@@ -48,6 +48,7 @@ class IknowU():  # pylint: disable=too-few-public-methods
         self.__logger.debug('Starting %s [%s]', self.__name, self.__version__)
         self.__config = None
         self._config()
+
         header = (
             f'{self.__name} <command> [<args>]\n\n'
             'commands:\n'
@@ -55,21 +56,20 @@ class IknowU():  # pylint: disable=too-few-public-methods
             '  train          Train model\n'
             '  infer          Do an infer\n\n'
         )
-        epilog = (
-            'examples:\n'
-            f'  {self.__name} --help\n'
-            f'  {self.__name} -v\n'
-            '\n'
-            'Copyright (c) 2020 Marcio Pessoa' + '\n'
-            'License: ' + 'GPLv2. There is NO WARRANTY.' + '\n'
-            'Website: ' + 'https://github.com/marcio-pessoa/iknowu\n'
-            'Contact: ' + 'Marcio Pessoa <marcio.pessoa@gmail.com>\n'
-        )
         parser = argparse.ArgumentParser(
             prog=self.__name,
             description='Machine Learning image categorisation',
             formatter_class=argparse.RawDescriptionHelpFormatter,
-            epilog=epilog,
+            epilog=(
+                'examples:\n'
+                f'  {self.__name} --help\n'
+                f'  {self.__name} -v\n'
+                '\n'
+                'Copyright (c) 2020 Marcio Pessoa' + '\n'
+                'License: ' + 'GPLv2. There is NO WARRANTY.' + '\n'
+                'Website: ' + 'https://github.com/marcio-pessoa/iknowu\n'
+                'Contact: ' + 'Marcio Pessoa <marcio.pessoa@gmail.com>\n'
+            ),
             add_help=True,
             usage=header
         )
@@ -80,14 +80,17 @@ class IknowU():  # pylint: disable=too-few-public-methods
             help='show version information and exit',
             version=f'{self.__name} {self.__version__} {self.__date__}',
         )
+
         if len(sys.argv) < 2:
             print(header)
             sys.exit(True)
+
         args = parser.parse_args(sys.argv[1:2])
         if not hasattr(self, args.command):
             print('Unrecognized command')
             parser.print_help()
             sys.exit(True)
+
         getattr(self, args.command)()
 
     def obtain(self):
