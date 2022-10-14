@@ -4,41 +4,36 @@
 ---
 name: iknowu.py
 description: Main program file
-copyright: 2020 Marcio Pessoa
 people:
   developers:
   - name: Marcio Pessoa
     email: marcio.pessoa@gmail.com
-change-log: Check CHANGELOG.md file.
 """
 
-# Check Python version
 import sys
+import os
+import logging
+import logging.handlers
+import json
+import argparse
+
+from tools.config import config
+
 if not (sys.version_info.major == 3 and sys.version_info.minor >= 6):
     print("This program requires Python 3.6 or higher!")
-    print(f"You are using Python {sys.version_info.major}.{sys.version_info.minor}.")
-    sys.exit(True)
-
-# Check and import modules
-try:
-    import os
-    import logging
-    import logging.handlers
-    import json
-    import argparse
-    from tools.config import config
-except ImportError as err:
-    print("Could not load module. " + str(err))
+    print(
+        'You are using Python '
+        f'{sys.version_info.major}.{sys.version_info.minor}.'
+    )
     sys.exit(True)
 
 
-class InowU():  # pylint: disable=too-few-public-methods,too-many-instance-attributes
-    """
-    description:
+class IknowU():  # pylint: disable=too-few-public-methods
+    """ InowU class
 
-    reference:
-    - https://docs.python.org/2/library/argparse.html
-      http://chase-seibert.github.io/blog/
+    argparse reference:
+      - https://docs.python.org/2/library/argparse.html
+      - http://chase-seibert.github.io/blog/
     """
 
     __version__ = 0.02
@@ -46,11 +41,6 @@ class InowU():  # pylint: disable=too-few-public-methods,too-many-instance-attri
 
     def __init__(self):
         self.__name = "iknowu.py"
-        self.__description = "Machine Learning image categorisation"
-        self.__copyright = "Copyright (c) 2020 Marcio Pessoa"
-        self.__license = "GPLv2. There is NO WARRANTY."
-        self.__website = "https://github.com/marcio-pessoa/InowU"
-        self.__contact = "Marcio Pessoa <marcio.pessoa@gmail.com>"
         self.__work_dir = os.path.dirname(os.path.realpath(__file__))
         self.__logger = logging.getLogger(self.__name)
         self._logger()
@@ -58,32 +48,38 @@ class InowU():  # pylint: disable=too-few-public-methods,too-many-instance-attri
         self.__logger.debug('Starting %s [%s]', self.__name, self.__version__)
         self.__config = None
         self._config()
-        header = (self.__name + ' <command> [<args>]\n\n' +
-                  'commands:\n' +
-                  '  obtain         Obtain data (import pictures)\n' +
-                  '  train          Train model\n'
-                  '  infer          Do an infer\n\n')
-        footer = (self.__copyright + '\n' +
-                  'License: ' + self.__license + '\n' +
-                  'Website: ' + self.__website + '\n' +
-                  'Contact: ' + self.__contact + '\n')
-        examples = ('examples:\n' +
-                    '  ' + self.__name + ' --help\n' + \
-                    '  ' + self.__name + ' -v\n')
-        self.version = (self.__name + " " + str(self.__version__) + " (" +
-                        self.__date__ + ")")
-        epilog = (examples + '\n' + footer)
+        header = (
+            f'{self.__name} <command> [<args>]\n\n'
+            'commands:\n'
+            '  obtain         Obtain data (import pictures)\n'
+            '  train          Train model\n'
+            '  infer          Do an infer\n\n'
+        )
+        epilog = (
+            'examples:\n'
+            f'  {self.__name} --help\n'
+            f'  {self.__name} -v\n'
+            '\n'
+            'Copyright (c) 2020 Marcio Pessoa' + '\n'
+            'License: ' + 'GPLv2. There is NO WARRANTY.' + '\n'
+            'Website: ' + 'https://github.com/marcio-pessoa/iknowu\n'
+            'Contact: ' + 'Marcio Pessoa <marcio.pessoa@gmail.com>\n'
+        )
         parser = argparse.ArgumentParser(
             prog=self.__name,
-            description=self.__description,
+            description='Machine Learning image categorisation',
             formatter_class=argparse.RawDescriptionHelpFormatter,
             epilog=epilog,
             add_help=True,
-            usage=header)
+            usage=header
+        )
         parser.add_argument('command', help='command to run')
-        parser.add_argument('-V', '--version', action='version',
-                            version=self.version,
-                            help='show version information and exit')
+        parser.add_argument(
+            '-V', '--version',
+            action='version',
+            help='show version information and exit',
+            version=f'{self.__name} {self.__version__} {self.__date__}',
+        )
         if len(sys.argv) < 2:
             print(header)
             sys.exit(True)
@@ -121,7 +117,8 @@ class InowU():  # pylint: disable=too-few-public-methods,too-many-instance-attri
             help='DEBUG, INFO, WARNING, ERROR (default) or CRITICAL')
         args = parser.parse_args(sys.argv[2:])
         self._verbosity(args.verbosity)
-        from tools.obtain import Obtain  # pylint: disable=import-outside-toplevel
+        from tools.obtain \
+            import Obtain  # pylint: disable=import-outside-toplevel
         self.__logger.info('Running obtain...')
         step = Obtain()
         status = step.config(
@@ -156,7 +153,8 @@ class InowU():  # pylint: disable=too-few-public-methods,too-many-instance-attri
             help='DEBUG, INFO, WARNING, ERROR (default) or CRITICAL')
         args = parser.parse_args(sys.argv[2:])
         self._verbosity(args.verbosity)
-        from tools.train import Train  # pylint: disable=import-outside-toplevel
+        from tools.train \
+            import Train  # pylint: disable=import-outside-toplevel
         self.__logger.info('Running train...')
         step = Train()
         step.epochs = args.epochs
@@ -189,7 +187,8 @@ class InowU():  # pylint: disable=too-few-public-methods,too-many-instance-attri
             help='DEBUG, INFO, WARNING, ERROR (default) or CRITICAL')
         args = parser.parse_args(sys.argv[2:])
         self._verbosity(args.verbosity)
-        from tools.infer import Infer  # pylint: disable=import-outside-toplevel
+        from tools.infer \
+            import Infer  # pylint: disable=import-outside-toplevel
         self.__logger.info('Running infer...')
         step = Infer()
         status = step.config(
@@ -228,7 +227,7 @@ class InowU():  # pylint: disable=too-few-public-methods,too-many-instance-attri
         elif level == 'CRITICAL':
             self.__logger.setLevel(logging.CRITICAL)
         else:
-            self.__logger.error('Unknown verbosity level, setting to: \'ERROR\'')
+            self.__logger.error("Unknown verbosity level, setting to: 'ERROR'")
             self.__logger.setLevel(logging.ERROR)
 
     def _config(self):
@@ -248,11 +247,5 @@ class InowU():  # pylint: disable=too-few-public-methods,too-many-instance-attri
         return True
 
 
-def main():
-    """
-    description:
-    """
-    InowU()
-
 if __name__ == '__main__':
-    main()
+    IknowU()

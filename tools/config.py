@@ -2,15 +2,14 @@
 ---
 name: config.py
 description: Configuration package
-copyright: 2020 Marcio Pessoa
 people:
   developers:
   - name: Marcio Pessoa
-    email: marcio.pessoa@telefonica.com
-change-log: Check CHANGELOG.md file.
+    email: marcio.pessoa@gmail.com
 """
 
 import json
+
 
 def config(config_file):
     """

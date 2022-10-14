@@ -2,12 +2,10 @@
 ---
 name: train.py
 description: IknowU train package
-copyright: 2020 Marcio Pessoa
 people:
   developers:
   - name: Marcio Pessoa
-    email: marcio.pessoa@telefonica.com
-change-log: Check CHANGELOG.md file.
+    email: marcio.pessoa@gmail.com
 """
 
 import os
@@ -18,11 +16,12 @@ import json
 # 1 = INFO messages are not printed
 # 2 = INFO and WARNING messages are not printed
 # 3 = INFO, WARNING, and ERROR messages are not printed
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 
 with contextlib.redirect_stdout(None):
     import tensorflow as tf  # pylint: disable=import-error
-    from keras_preprocessing.image import ImageDataGenerator  # pylint: disable=import-error
+    from keras_preprocessing.image \
+        import ImageDataGenerator  # pylint: disable=import-error
 
 
 class Train():
@@ -86,7 +85,8 @@ class Train():
 
     def _model(self):
         self.__model = tf.keras.models.Sequential([
-            # Note the input shape is the desired size of the image 150x150 with 3 bytes color
+            # Note the input shape is the desired size of the image 150x150
+            # with 3 bytes color
             # This is the first convolution
             tf.keras.layers.Conv2D(
                 64, (3, 3),

@@ -2,12 +2,10 @@
 ---
 name: inter.py
 description: IknowU inter package
-copyright: 2020 Marcio Pessoa
 people:
   developers:
   - name: Marcio Pessoa
-    email: marcio.pessoa@telefonica.com
-change-log: Check CHANGELOG.md file.
+    email: marcio.pessoa@gmail.com
 """
 
 import os
@@ -18,7 +16,7 @@ import numpy as np
 # 1 = INFO messages are not printed
 # 2 = INFO and WARNING messages are not printed
 # 3 = INFO, WARNING, and ERROR messages are not printed
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 with contextlib.redirect_stdout(None):
     import tensorflow as tf  # pylint: disable=import-error
@@ -49,7 +47,8 @@ class Infer():
                 return \
                     {
                         'error': {
-                            'message': 'Directory not found: ' + self.__directory
+                            'message': 'Directory not found: ' +
+                            self.__directory
                         }
                     }
         if picture:
@@ -72,7 +71,9 @@ class Infer():
         self.__model = tf.keras.models.load_model(model_file_path)
 
     def _load_picture(self):
-        picture_raw = image.load_img(self.__picture_path, target_size=(150, 150))
+        picture_raw = image.load_img(
+            self.__picture_path, target_size=(150, 150)
+        )
         picture_array = image.img_to_array(picture_raw)
         picture_array = np.expand_dims(picture_array, axis=0)
         self.__picture = np.vstack([picture_array])
