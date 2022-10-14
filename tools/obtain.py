@@ -2,12 +2,10 @@
 ---
 name: obtain.py
 description: IknowU obtain package
-copyright: 2020 Marcio Pessoa
 people:
   developers:
   - name: Marcio Pessoa
-    email: marcio.pessoa@telefonica.com
-change-log: Check CHANGELOG.md file.
+    email: marcio.pessoa@gmail.com
 """
 
 import os
@@ -121,6 +119,7 @@ class Obtain():
             if os.path.isfile(path):
                 shutil.copy(path, self.__dst_dir)
         return {}
+
 
 def create_directory(directory):
     """
