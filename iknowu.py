@@ -12,11 +12,10 @@ people:
 
 import sys
 import os
-import logging
-import logging.handlers
 import json
 import argparse
 
+from tools.log import Log, log
 from tools.config import config
 
 if not (sys.version_info.major == 3 and sys.version_info.minor >= 6):
@@ -42,10 +41,12 @@ class IknowU():  # pylint: disable=too-few-public-methods
     def __init__(self):
         self.__name = "iknowu.py"
         self.__work_dir = os.path.dirname(os.path.realpath(__file__))
-        self.__logger = logging.getLogger(self.__name)
-        self._logger()
-        self.__logger.setLevel(logging.DEBUG)
-        self.__logger.debug('Starting %s [%s]', self.__name, self.__version__)
+
+        Log().name = 'IknowU'
+        Log().verbosity = 'WARNING'
+        Log().start()
+        log.info('Starting %s [%s]', self.__name, self.__version__)
+
         self.__config = None
         self._config()
 
@@ -119,10 +120,10 @@ class IknowU():  # pylint: disable=too-few-public-methods
             required=False,
             help='DEBUG, INFO, WARNING, ERROR (default) or CRITICAL')
         args = parser.parse_args(sys.argv[2:])
-        self._verbosity(args.verbosity)
+        Log().verbosity = args.verbosity
         from tools.obtain \
             import Obtain  # pylint: disable=import-outside-toplevel
-        self.__logger.info('Running obtain...')
+        log.info('Running obtain...')
         step = Obtain()
         status = step.config(
             source_directory=args.directory,
@@ -132,10 +133,10 @@ class IknowU():  # pylint: disable=too-few-public-methods
             purpose=args.purpose,
             name=args.name)
         self._check_error(status)
-        self.__logger.info(step.info())
+        log.info(step.info())
         result = step.run()
         self._check_error(result)
-        self.__logger.info('Done')
+        log.info('Done')
 
     def train(self):
         """
@@ -155,10 +156,10 @@ class IknowU():  # pylint: disable=too-few-public-methods
             required=False,
             help='DEBUG, INFO, WARNING, ERROR (default) or CRITICAL')
         args = parser.parse_args(sys.argv[2:])
-        self._verbosity(args.verbosity)
+        Log().verbosity = args.verbosity
         from tools.train \
             import Train  # pylint: disable=import-outside-toplevel
-        self.__logger.info('Running train...')
+        log.info('Running train...')
         step = Train()
         step.epochs = args.epochs
         status = step.config(
@@ -166,12 +167,12 @@ class IknowU():  # pylint: disable=too-few-public-methods
                 self.__work_dir,
                 self.__config['general']['directory']))
         self._check_error(status)
-        # self.__logger.info(step.info())
+        # log.info(step.info())
         result = step.run()
         self._check_error(result)
         print(json.dumps(result, indent=2, separators=(", ", ": ")))
-        self.__logger.info(result)
-        self.__logger.info('Done')
+        log.info(result)
+        log.info('Done')
 
     def infer(self):
         """
@@ -189,10 +190,10 @@ class IknowU():  # pylint: disable=too-few-public-methods
             required=False,
             help='DEBUG, INFO, WARNING, ERROR (default) or CRITICAL')
         args = parser.parse_args(sys.argv[2:])
-        self._verbosity(args.verbosity)
+        Log().verbosity = args.verbosity
         from tools.infer \
             import Infer  # pylint: disable=import-outside-toplevel
-        self.__logger.info('Running infer...')
+        log.info('Running infer...')
         step = Infer()
         status = step.config(
             directory=os.path.join(
@@ -204,34 +205,9 @@ class IknowU():  # pylint: disable=too-few-public-methods
         result = step.run()['results']
         self._check_error(result)
         print(result['person'])
-        self.__logger.info('Person: %s', result['person'])
-        self.__logger.info('Class: %s', result['classes'])
-        self.__logger.info('Done')
-
-    def _logger(self):
-        _format = ' [%(process)d]: %(levelname)s: %(message)s'
-        formatter = logging.Formatter(fmt=self.__name + _format)
-        handler = logging.handlers.SysLogHandler(address='/dev/log')
-        handler.setFormatter(formatter)
-        self.__logger.addHandler(handler)
-
-    def _verbosity(self, level):
-        """
-        description: Set verbosity
-        """
-        if level == 'DEBUG':
-            self.__logger.setLevel(logging.DEBUG)
-        elif level == 'INFO':
-            self.__logger.setLevel(logging.INFO)
-        elif level == 'WARNING':
-            self.__logger.setLevel(logging.WARNING)
-        elif level == 'ERROR':
-            self.__logger.setLevel(logging.ERROR)
-        elif level == 'CRITICAL':
-            self.__logger.setLevel(logging.CRITICAL)
-        else:
-            self.__logger.error("Unknown verbosity level, setting to: 'ERROR'")
-            self.__logger.setLevel(logging.ERROR)
+        log.info('Person: %s', result['person'])
+        log.info('Class: %s', result['classes'])
+        log.info('Done')
 
     def _config(self):
         config_file = os.path.join(self.__work_dir, 'config.json')
@@ -243,9 +219,9 @@ class IknowU():  # pylint: disable=too-few-public-methods
             return False
         if 'error' in message:
             if 'message' in message['error']:
-                self.__logger.error(message['error']['message'])
+                log.error(message['error']['message'])
             if 'exception' in message['error']:
-                self.__logger.error(message['error']['exception'])
+                log.error(message['error']['exception'])
             sys.exit(True)
         return True
 
