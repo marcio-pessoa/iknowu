@@ -24,9 +24,7 @@ with contextlib.redirect_stdout(None):
 
 
 class Infer():
-    """
-    description:
-    """
+    """ Infer class """
 
     __version__ = 0.02
 
@@ -94,10 +92,4 @@ class Infer():
         self._load_picture()
         classes = self.__model.predict(self.__picture, batch_size=10)
         person = self._what_is_your_name(classes)
-        return \
-            {
-                'results': {
-                    'person': person,
-                    'classes': classes
-                }
-            }
+        return person

@@ -12,7 +12,6 @@ people:
 
 import sys
 import os
-import json
 import argparse
 
 from tools.log import Log, log
@@ -117,10 +116,7 @@ class IknowU():
                 Config().get['general']['directory']))
         self._check_error(status)
         # log.info(step.info())
-        result = step.run()
-        self._check_error(result)
-        print(json.dumps(result, indent=2, separators=(", ", ": ")))
-        log.info(result)
+        step.run()
         log.info('Done')
 
     def infer(self):

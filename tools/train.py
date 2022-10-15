@@ -12,6 +12,8 @@ import os
 import contextlib
 import json
 
+from tools.log import log
+
 # 0 = all messages are logged (default behavior)
 # 1 = INFO messages are not printed
 # 2 = INFO and WARNING messages are not printed
@@ -25,9 +27,7 @@ with contextlib.redirect_stdout(None):
 
 
 class Train():
-    """
-    description:
-    """
+    """ Train class """
 
     __version__ = 0.02
 
@@ -142,10 +142,6 @@ class Train():
         self._save()
         history_str = str(history.history).replace('\'', '"')
         history_dic = json.loads(history_str)
-        return \
-            {
-                'results': {
-                    'history': history_dic,
-                    'epocs': len(history.history['accuracy'])
-                }
-            }
+        log.info('history: %s', history_dic)
+        log.info('epocs: %s', len(history.history['accuracy']))
+        return history.history
