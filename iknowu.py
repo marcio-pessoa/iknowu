@@ -43,7 +43,6 @@ class IknowU():  # pylint: disable=too-few-public-methods
         log.info('Starting %s [%s]', self.__name, self.__version__)
 
         Config().file = os.path.join(self.__work_dir, 'config.json')
-        self.__config = Config().get
 
         parser = argparse.ArgumentParser(
             prog=self.__name,
@@ -123,7 +122,7 @@ class IknowU():  # pylint: disable=too-few-public-methods
             source_directory=args.directory,
             destination_directory=os.path.join(
                 self.__work_dir,
-                self.__config['general']['directory']),
+                Config().get['general']['directory']),
             purpose=args.purpose,
             name=args.name)
         self._check_error(status)
@@ -159,7 +158,7 @@ class IknowU():  # pylint: disable=too-few-public-methods
         status = step.config(
             directory=os.path.join(
                 self.__work_dir,
-                self.__config['general']['directory']))
+                Config().get['general']['directory']))
         self._check_error(status)
         # log.info(step.info())
         result = step.run()
@@ -192,9 +191,9 @@ class IknowU():  # pylint: disable=too-few-public-methods
         status = step.config(
             directory=os.path.join(
                 self.__work_dir,
-                self.__config['general']['directory']),
+                Config().get['general']['directory']),
             picture=args.file,
-            people=self.__config['person'])
+            people=Config().get['person'])
         self._check_error(status)
         result = step.run()['results']
         self._check_error(result)
