@@ -28,7 +28,7 @@ if not (sys.version_info.major == 3 and sys.version_info.minor >= 6):
 
 
 class IknowU():  # pylint: disable=too-few-public-methods
-    """ InowU class """
+    """ InowU main class """
 
     __version__ = 0.02
     __date__ = "2020-10-15"
@@ -42,7 +42,7 @@ class IknowU():  # pylint: disable=too-few-public-methods
         Log().start()
         log.info('Starting %s [%s]', self.__name, self.__version__)
 
-        Config().file = os.path.join(self.__work_dir, 'config.json')
+        Config().file = os.path.join(self.__work_dir, 'config.yaml')
 
         parser = argparse.ArgumentParser(
             prog=self.__name,

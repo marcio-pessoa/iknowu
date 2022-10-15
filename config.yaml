@@ -1,0 +1,12 @@
+person:
+  - name: Rock
+    nick: Rock
+    directory: rock
+  - name: Paper
+    nick: Paper
+    directory: paper
+  - name: Scissors
+    nick: Scissors
+    directory: scissors
+general:
+  directory: var
