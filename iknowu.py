@@ -27,8 +27,8 @@ if not (sys.version_info.major == 3 and sys.version_info.minor >= 6):
     sys.exit(True)
 
 
-class IknowU():  # pylint: disable=too-few-public-methods
-    """ InowU main class """
+class IknowU():
+    """ IknowU main class """
 
     __version__ = 0.02
     __date__ = "2020-10-15"
@@ -86,50 +86,6 @@ class IknowU():  # pylint: disable=too-few-public-methods
             sys.exit(True)
 
         getattr(self, args.command)()
-
-    def obtain(self):
-        """
-        description:
-        """
-        parser = argparse.ArgumentParser(
-            prog=f'{self.__name} obtain',
-            description='Obtain data')
-        parser.add_argument(
-            '-d', '--directory',
-            required=True,
-            help='Directory')
-        parser.add_argument(
-            '-n', '--name',
-            required=True,
-            help='Personal name')
-        parser.add_argument(
-            '-p', '--purpose',
-            required=True,
-            default='training',
-            choices=['training', 'evaluate'],
-            help='Desired purpose')
-        parser.add_argument(
-            '-v', '--verbosity',
-            required=False,
-            help='DEBUG, INFO, WARNING, ERROR (default) or CRITICAL')
-        args = parser.parse_args(sys.argv[2:])
-        Log().verbosity = args.verbosity
-        from tools.obtain \
-            import Obtain  # pylint: disable=import-outside-toplevel
-        log.info('Running obtain...')
-        step = Obtain()
-        status = step.config(
-            source_directory=args.directory,
-            destination_directory=os.path.join(
-                self.__work_dir,
-                Config().get['general']['directory']),
-            purpose=args.purpose,
-            name=args.name)
-        self._check_error(status)
-        log.info(step.info())
-        result = step.run()
-        self._check_error(result)
-        log.info('Done')
 
     def train(self):
         """
@@ -195,11 +151,7 @@ class IknowU():  # pylint: disable=too-few-public-methods
             picture=args.file,
             people=Config().get['person'])
         self._check_error(status)
-        result = step.run()['results']
-        self._check_error(result)
-        print(result['person'])
-        log.info('Person: %s', result['person'])
-        log.info('Class: %s', result['classes'])
+        print(step.run())
         log.info('Done')
 
     def _check_error(self, message):
