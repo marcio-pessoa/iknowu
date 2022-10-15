@@ -13,6 +13,7 @@ people:
 import sys
 import os
 import argparse
+import numpy as np
 
 from tools.log import Log, log
 from tools.config import Config
@@ -117,11 +118,16 @@ class IknowU():
         self._check_error(status)
         # log.info(step.info())
         history = step.run()
-        log.info('loss:\n%s', history['loss'])
-        log.info('accuracy:\n%s', history['accuracy'])
-        log.info('val_loss:\n%s', history['val_loss'])
-        log.info('val_accuracy:\n%s', history['val_accuracy'])
-        log.info('epocs: %s', len(history['loss']))
+
+        header = ['loss', 'accuracy', 'val_loss', 'val_accuracy']
+        result = [
+            history['loss'],
+            history['accuracy'],
+            history['val_loss'],
+            history['val_accuracy']
+        ]
+        log.debug(header)
+        log.debug(np.transpose(result).tolist())
         log.info('Done')
 
     def infer(self):
