@@ -42,8 +42,8 @@ class IknowU():  # pylint: disable=too-few-public-methods
         Log().start()
         log.info('Starting %s [%s]', self.__name, self.__version__)
 
-        self.__config = None
-        self._config()
+        Config().file = os.path.join(self.__work_dir, 'config.json')
+        self.__config = Config().get
 
         parser = argparse.ArgumentParser(
             prog=self.__name,
@@ -202,11 +202,6 @@ class IknowU():  # pylint: disable=too-few-public-methods
         log.info('Person: %s', result['person'])
         log.info('Class: %s', result['classes'])
         log.info('Done')
-
-    def _config(self):
-        Config().file = os.path.join(self.__work_dir, 'config.json')
-        self.__config = Config().get
-        self._check_error(self.__config)
 
     def _check_error(self, message):
         if not message:
