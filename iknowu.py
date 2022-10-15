@@ -16,7 +16,7 @@ import json
 import argparse
 
 from tools.log import Log, log
-from tools.config import config
+from tools.config import Config
 
 if not (sys.version_info.major == 3 and sys.version_info.minor >= 6):
     print("This program requires Python 3.6 or higher!")
@@ -204,8 +204,8 @@ class IknowU():  # pylint: disable=too-few-public-methods
         log.info('Done')
 
     def _config(self):
-        config_file = os.path.join(self.__work_dir, 'config.json')
-        self.__config = config(config_file)
+        Config().file = os.path.join(self.__work_dir, 'config.json')
+        self.__config = Config().get
         self._check_error(self.__config)
 
     def _check_error(self, message):
