@@ -118,6 +118,7 @@ class IknowU():
         self._check_error(status)
         # log.info(step.info())
         history = step.run()
+        step.save()
 
         header = ['loss', 'accuracy', 'val_loss', 'val_accuracy']
         result = [

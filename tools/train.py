@@ -121,14 +121,13 @@ class Train():
             metrics=['accuracy'])
         self.__model.summary()
 
-    def _save(self):
+    def save(self):
+        """ Save model """
         model_file_path = os.path.join(self.__directory, 'model.h5')
         self.__model.save(model_file_path)
 
     def run(self):
-        """
-        description:
-        """
+        """ Run model """
         self._datagen()
         self._model()
         history = self.__model.fit(
@@ -136,5 +135,4 @@ class Train():
             epochs=self.epochs,
             validation_data=self.__generator_evaluate,
             verbose=True)
-        self._save()
         return history.history
