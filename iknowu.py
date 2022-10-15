@@ -54,10 +54,10 @@ class IknowU():  # pylint: disable=too-few-public-methods
                 f'  {self.__name} --help\n'
                 f'  {self.__name} -v\n'
                 '\n'
-                'Copyright (c) 2020 Marcio Pessoa' + '\n'
-                'License: ' + 'GPLv2. There is NO WARRANTY.' + '\n'
-                'Website: ' + 'https://github.com/marcio-pessoa/iknowu\n'
-                'Contact: ' + 'Marcio Pessoa <marcio.pessoa@gmail.com>\n'
+                'Copyright (c) 2020 Marcio Pessoa\n'
+                'License: GPLv2. There is NO WARRANTY.\n'
+                'Website: https://github.com/marcio-pessoa/iknowu\n'
+                'Contact: Marcio Pessoa <marcio.pessoa@gmail.com>\n'
             ),
             add_help=True,
             usage=(
@@ -93,7 +93,7 @@ class IknowU():  # pylint: disable=too-few-public-methods
         description:
         """
         parser = argparse.ArgumentParser(
-            prog=self.__name + ' obtain',
+            prog=f'{self.__name} obtain',
             description='Obtain data')
         parser.add_argument(
             '-d', '--directory',
@@ -137,7 +137,7 @@ class IknowU():  # pylint: disable=too-few-public-methods
         description:
         """
         parser = argparse.ArgumentParser(
-            prog=self.__name + ' train',
+            prog=f'{self.__name} train',
             description='Train model')
         parser.add_argument(
             '-e', '--epochs',
@@ -173,7 +173,7 @@ class IknowU():  # pylint: disable=too-few-public-methods
         description:
         """
         parser = argparse.ArgumentParser(
-            prog=self.__name + ' infer',
+            prog=f'{self.__name} infer',
             description='Do an infer')
         parser.add_argument(
             '-f', '--file',
