@@ -105,9 +105,9 @@ class IknowU():
             help='DEBUG, INFO, WARNING, ERROR (default) or CRITICAL')
         args = parser.parse_args(sys.argv[2:])
         Log().verbosity = args.verbosity
+        log.info('Running train...')
         from tools.train \
             import Train  # pylint: disable=import-outside-toplevel
-        log.info('Running train...')
         step = Train()
         step.epochs = args.epochs
         status = step.config(
@@ -116,7 +116,12 @@ class IknowU():
                 Config().get['general']['directory']))
         self._check_error(status)
         # log.info(step.info())
-        step.run()
+        history = step.run()
+        log.info('loss:\n%s', history['loss'])
+        log.info('accuracy:\n%s', history['accuracy'])
+        log.info('val_loss:\n%s', history['val_loss'])
+        log.info('val_accuracy:\n%s', history['val_accuracy'])
+        log.info('epocs: %s', len(history['loss']))
         log.info('Done')
 
     def infer(self):
@@ -136,9 +141,9 @@ class IknowU():
             help='DEBUG, INFO, WARNING, ERROR (default) or CRITICAL')
         args = parser.parse_args(sys.argv[2:])
         Log().verbosity = args.verbosity
+        log.info('Running infer...')
         from tools.infer \
             import Infer  # pylint: disable=import-outside-toplevel
-        log.info('Running infer...')
         step = Infer()
         status = step.config(
             directory=os.path.join(

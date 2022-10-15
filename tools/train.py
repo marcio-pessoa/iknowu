@@ -10,9 +10,6 @@ people:
 
 import os
 import contextlib
-import json
-
-from tools.log import log
 
 # 0 = all messages are logged (default behavior)
 # 1 = INFO messages are not printed
@@ -35,7 +32,7 @@ class Train():
         self.__directory = None
         self.__dir_training = None
         self.__dir_evaluate = None
-        self.__model = None
+        self.__model: tf.keras.models.Sequential
         self.__generator_training = None
         self.__generator_evaluate = None
         self.epochs = 25
@@ -140,8 +137,4 @@ class Train():
             validation_data=self.__generator_evaluate,
             verbose=True)
         self._save()
-        history_str = str(history.history).replace('\'', '"')
-        history_dic = json.loads(history_str)
-        log.info('history: %s', history_dic)
-        log.info('epocs: %s', len(history.history['accuracy']))
         return history.history
