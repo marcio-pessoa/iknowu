@@ -28,15 +28,10 @@ if not (sys.version_info.major == 3 and sys.version_info.minor >= 6):
 
 
 class IknowU():  # pylint: disable=too-few-public-methods
-    """ InowU class
-
-    argparse reference:
-      - https://docs.python.org/2/library/argparse.html
-      - http://chase-seibert.github.io/blog/
-    """
+    """ InowU class """
 
     __version__ = 0.02
-    __date__ = "2020-03-09"
+    __date__ = "2020-10-15"
 
     def __init__(self):
         self.__name = "iknowu.py"
@@ -50,13 +45,6 @@ class IknowU():  # pylint: disable=too-few-public-methods
         self.__config = None
         self._config()
 
-        header = (
-            f'{self.__name} <command> [<args>]\n\n'
-            'commands:\n'
-            '  obtain         Obtain data (import pictures)\n'
-            '  train          Train model\n'
-            '  infer          Do an infer\n\n'
-        )
         parser = argparse.ArgumentParser(
             prog=self.__name,
             description='Machine Learning image categorisation',
@@ -72,7 +60,13 @@ class IknowU():  # pylint: disable=too-few-public-methods
                 'Contact: ' + 'Marcio Pessoa <marcio.pessoa@gmail.com>\n'
             ),
             add_help=True,
-            usage=header
+            usage=(
+                f'{self.__name} <command> [<args>]\n\n'
+                'commands:\n'
+                '  obtain         Obtain data (import pictures)\n'
+                '  train          Train model\n'
+                '  infer          Do an infer\n\n'
+            )
         )
         parser.add_argument('command', help='command to run')
         parser.add_argument(
@@ -83,7 +77,7 @@ class IknowU():  # pylint: disable=too-few-public-methods
         )
 
         if len(sys.argv) < 2:
-            print(header)
+            parser.print_usage()
             sys.exit(True)
 
         args = parser.parse_args(sys.argv[1:2])
