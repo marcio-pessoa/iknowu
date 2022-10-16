@@ -11,6 +11,8 @@ people:
 import os
 import contextlib
 
+from tools.config import Config
+
 # 0 = all messages are logged (default behavior)
 # 1 = INFO messages are not printed
 # 2 = INFO and WARNING messages are not printed
@@ -37,24 +39,20 @@ class Train():
         self.__generator_evaluate = None
         self.epochs = 25
 
-    def config(self, directory=None):
-        """
-        description:
-        """
-        if directory:
-            self.__directory = directory
-            self.__dir_training = os.path.join(self.__directory, 'training')
-            self.__dir_evaluate = os.path.join(self.__directory, 'evaluate')
-            directories = (self.__dir_training, self.__dir_evaluate)
-            for i in directories:
-                if not os.path.isdir(i):
-                    return \
-                        {
-                            'error': {
-                                'message': 'Directory not found: ' + i
-                            }
-                        }
-        return {}
+        self._config()
+
+    def _config(self):
+        self.__directory = os.path.join(
+            os.path.dirname(os.path.realpath(__file__)),
+            '../',
+            Config().get['general']['directory']
+        )
+        self.__dir_training = os.path.join(self.__directory, 'training')
+        self.__dir_evaluate = os.path.join(self.__directory, 'evaluate')
+        directories = (self.__dir_training, self.__dir_evaluate)
+        for i in directories:
+            if not os.path.isdir(i):
+                raise Exception(f'Directory not found: {i}')
 
     def _datagen(self):
         # Set data generator

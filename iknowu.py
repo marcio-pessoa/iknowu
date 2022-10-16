@@ -32,10 +32,10 @@ class IknowU():
 
     __version__ = 0.02
     __date__ = "2020-10-15"
+    __work_dir = os.path.dirname(os.path.realpath(__file__))
 
     def __init__(self):
         self.__name = "iknowu.py"
-        self.__work_dir = os.path.dirname(os.path.realpath(__file__))
 
         Log().name = 'IknowU'
         Log().verbosity = 'WARNING'
@@ -111,11 +111,6 @@ class IknowU():
             import Train  # pylint: disable=import-outside-toplevel
         step = Train()
         step.epochs = args.epochs
-        status = step.config(
-            directory=os.path.join(
-                self.__work_dir,
-                Config().get['general']['directory']))
-        self._check_error(status)
         # log.info(step.info())
         history = step.run()
         step.save()
