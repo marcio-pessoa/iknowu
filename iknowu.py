@@ -113,28 +113,26 @@ class IknowU():
             type=int,
             help='Epochs')
         parser.add_argument(
+            '-r', '--report',
+            required=False,
+            action='store_true',
+            help='Save report',
+        )
+        parser.add_argument(
             '-v', '--verbosity',
             required=False,
             help='DEBUG, INFO, WARNING, ERROR (default) or CRITICAL')
         args = parser.parse_args(sys.argv[2:])
         Log().verbosity = args.verbosity
         log.info('Running train...')
-        import numpy as np  # pylint: disable=import-outside-toplevel
         from tools.train \
             import Train  # pylint: disable=import-outside-toplevel
         train = Train()
         train.epochs = args.epochs
-        history = train.run()
-        train.save()
-        header = ['loss', 'accuracy', 'val_loss', 'val_accuracy']
-        result = [
-            history['loss'],
-            history['accuracy'],
-            history['val_loss'],
-            history['val_accuracy']
-        ]
-        log.debug(header)
-        log.debug(np.transpose(result).tolist())
+        train.run()
+        train.save_model()
+        if args.report:
+            train.save_report()
         log.info('Done')
 
     @__logger

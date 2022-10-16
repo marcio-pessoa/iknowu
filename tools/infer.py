@@ -31,8 +31,8 @@ class Infer():
     __version__ = 0.02
 
     def __init__(self):
-        self.__directory = None
-        self.__picture_path = None
+        self.__directory = ''
+        self.__picture_path = ''
         self.__picture = None
         self.__people = []
         self.__model: tf.keras.models.Sequential
