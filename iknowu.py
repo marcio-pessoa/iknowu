@@ -109,7 +109,7 @@ class IknowU():
         parser.add_argument(
             '-e', '--epochs',
             required=False,
-            default=25,
+            default=15,
             type=int,
             help='Epochs')
         parser.add_argument(
@@ -127,12 +127,15 @@ class IknowU():
         log.info('Running train...')
         from tools.train \
             import Train  # pylint: disable=import-outside-toplevel
+        from tools.report \
+            import Report  # pylint: disable=import-outside-toplevel
         train = Train()
         train.epochs = args.epochs
-        train.run()
-        train.save_model()
+        history = train.run()
+        train.save()
         if args.report:
-            train.save_report()
+            report = Report(history)
+            report.save()
         log.info('Done')
 
     @__logger
