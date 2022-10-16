@@ -13,7 +13,7 @@ people:
 import sys
 import os
 import argparse
-import numpy as np
+from functools import wraps
 
 from tools.log import Log, log
 from tools.config import Config
@@ -32,17 +32,9 @@ class IknowU():
 
     __version__ = 0.02
     __date__ = "2020-10-15"
-    __work_dir = os.path.dirname(os.path.realpath(__file__))
 
     def __init__(self):
         self.__name = "iknowu.py"
-
-        Log().name = 'IknowU'
-        Log().verbosity = 'WARNING'
-        Log().start()
-        log.info('Starting %s [%s]', self.__name, self.__version__)
-
-        Config().file = os.path.join(self.__work_dir, 'config.yaml')
 
         parser = argparse.ArgumentParser(
             prog=self.__name,
@@ -87,10 +79,30 @@ class IknowU():
 
         getattr(self, args.command)()
 
+    @staticmethod
+    def __config(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            Config().file = os.path.join(
+                os.path.dirname(os.path.realpath(__file__)), 'config.yaml'
+            )
+            func(*args, **kwargs)
+        return wrapper
+
+    @staticmethod
+    def __logger(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            Log().name = 'IknowU'
+            Log().verbosity = 'WARNING'
+            Log().start()
+            func(*args, **kwargs)
+        return wrapper
+
+    @__logger
+    @__config
     def train(self):
-        """
-        description:
-        """
+        """ Train """
         parser = argparse.ArgumentParser(
             prog=f'{self.__name} train',
             description='Train model')
@@ -107,14 +119,13 @@ class IknowU():
         args = parser.parse_args(sys.argv[2:])
         Log().verbosity = args.verbosity
         log.info('Running train...')
+        import numpy as np  # pylint: disable=import-outside-toplevel
         from tools.train \
             import Train  # pylint: disable=import-outside-toplevel
-        step = Train()
-        step.epochs = args.epochs
-        # log.info(step.info())
-        history = step.run()
-        step.save()
-
+        train = Train()
+        train.epochs = args.epochs
+        history = train.run()
+        train.save()
         header = ['loss', 'accuracy', 'val_loss', 'val_accuracy']
         result = [
             history['loss'],
@@ -126,10 +137,10 @@ class IknowU():
         log.debug(np.transpose(result).tolist())
         log.info('Done')
 
+    @__logger
+    @__config
     def infer(self):
-        """
-        description:
-        """
+        """ Infer """
         parser = argparse.ArgumentParser(
             prog=f'{self.__name} infer',
             description='Do an infer')
@@ -146,27 +157,10 @@ class IknowU():
         log.info('Running infer...')
         from tools.infer \
             import Infer  # pylint: disable=import-outside-toplevel
-        step = Infer()
-        status = step.config(
-            directory=os.path.join(
-                self.__work_dir,
-                Config().get['general']['directory']),
-            picture=args.file,
-            people=Config().get['person'])
-        self._check_error(status)
-        print(step.run())
+        infer = Infer()
+        infer.picture = args.file
+        print(infer.run())
         log.info('Done')
-
-    def _check_error(self, message):
-        if not message:
-            return False
-        if 'error' in message:
-            if 'message' in message['error']:
-                log.error(message['error']['message'])
-            if 'exception' in message['error']:
-                log.error(message['error']['exception'])
-            sys.exit(True)
-        return True
 
 
 if __name__ == '__main__':

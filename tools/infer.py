@@ -12,6 +12,8 @@ import os
 import contextlib
 import numpy as np
 
+from tools.config import Config
+
 # 0 = all messages are logged (default behavior)
 # 1 = INFO messages are not printed
 # 2 = INFO and WARNING messages are not printed
@@ -33,36 +35,45 @@ class Infer():
         self.__picture_path = None
         self.__picture = None
         self.__people = []
-        self.__model = None
+        self.__model: tf.keras.models.Sequential
+        self._config()
 
-    def config(self, directory=None, picture=None, people=None):
+    def _config(self):
+        self.__directory = os.path.join(
+            os.path.dirname(os.path.realpath(__file__)),
+            '../',
+            Config().get['general']['directory']
+        )
+
+        if not os.path.isdir(self.__directory):
+            raise Exception(f'Directory not found: {self.__directory}')
+
+        for person in Config().get['person']:
+            self.__people.append(person['nick'])
+        self.__people.sort()
+
+    @property
+    def picture(self) -> str:
+        """ Picure path getter
+
+        Returns:
+            str: Picture path
         """
-        description:
+        return self.__picture_path
+
+    @picture.setter
+    def picture(self, picture_path: str):
+        """ Picture path setter
+
+        Args:
+            picture_path (str): File path
+
+        Raises:
+            Exception: Error message when file not found
         """
-        if directory:
-            self.__directory = directory
-            if not os.path.isdir(self.__directory):
-                return \
-                    {
-                        'error': {
-                            'message': 'Directory not found: ' +
-                            self.__directory
-                        }
-                    }
-        if picture:
-            self.__picture_path = picture
-            if not os.path.isfile(self.__picture_path):
-                return \
-                    {
-                        'error': {
-                            'message': 'File not found: ' + self.__picture_path
-                        }
-                    }
-        if people:
-            for person in people:
-                self.__people.append(person['nick'])
-            self.__people.sort()
-        return False
+        self.__picture_path = picture_path
+        if not os.path.isfile(self.__picture_path):
+            raise Exception(f'File not found: {self.__picture_path}')
 
     def _load_model(self):
         model_file_path = os.path.join(self.__directory, 'model.h5')
@@ -85,9 +96,7 @@ class Infer():
         return self.__people[position]
 
     def run(self):
-        """
-        description:
-        """
+        """ Run infer """
         self._load_model()
         self._load_picture()
         classes = self.__model.predict(self.__picture, batch_size=10)

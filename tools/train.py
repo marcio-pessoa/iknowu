@@ -38,7 +38,6 @@ class Train():
         self.__generator_training = None
         self.__generator_evaluate = None
         self.epochs = 25
-
         self._config()
 
     def _config(self):
