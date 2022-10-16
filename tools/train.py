@@ -10,7 +10,6 @@ people:
 
 import os
 import contextlib
-import pandas as pd
 
 from tools.config import Config
 
@@ -26,7 +25,7 @@ with contextlib.redirect_stdout(None):
         import ImageDataGenerator  # pylint: disable=import-error
 
 
-class Train():  # pylint: disable=too-many-instance-attributes
+class Train():
     """ Train class """
 
     __version__ = 0.02
@@ -38,8 +37,7 @@ class Train():  # pylint: disable=too-many-instance-attributes
         self.__model: tf.keras.models.Sequential
         self.__generator_training = None
         self.__generator_evaluate = None
-        self.__history = []
-        self.epochs = 25
+        self.epochs = 10
         self._config()
 
     def _config(self):
@@ -120,30 +118,18 @@ class Train():  # pylint: disable=too-many-instance-attributes
             metrics=['accuracy'])
         self.__model.summary()
 
-    def save_model(self):
+    def save(self):
         """ Save model """
         model_file_path = os.path.join(self.__directory, 'model.h5')
         self.__model.save(model_file_path)
-
-    def save_report(self):
-        """ Save report """
-        dataframe = pd.DataFrame(
-            [
-                self.__history.history['loss'],
-                self.__history.history['accuracy'],
-                self.__history.history['val_loss'],
-                self.__history.history['val_accuracy']
-            ],
-        ).transpose()
-        dataframe.columns = ['loss', 'accuracy', 'val_loss', 'val_accuracy']
-        dataframe.to_csv('report.csv')
 
     def run(self):
         """ Run model """
         self._datagen()
         self._model()
-        self.__history = self.__model.fit(
+        history = self.__model.fit(
             self.__generator_training,
             epochs=self.epochs,
             validation_data=self.__generator_evaluate,
             verbose=True)
+        return history
