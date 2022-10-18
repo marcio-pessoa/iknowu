@@ -12,12 +12,13 @@ import os
 import contextlib
 
 from tools.config import Config
+from tools.log import Log, logging
 
 # 0 = all messages are logged (default behavior)
 # 1 = INFO messages are not printed
 # 2 = INFO and WARNING messages are not printed
 # 3 = INFO, WARNING, and ERROR messages are not printed
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = str(Log().tf_verbosity)
 
 with contextlib.redirect_stdout(None):
     import tensorflow as tf  # pylint: disable=import-error
@@ -65,17 +66,19 @@ class Train():
             horizontal_flip=True,
             vertical_flip=True,
             fill_mode='nearest')
-        datagen_evaluate = ImageDataGenerator(
-            rescale=1/255)
+        datagen_evaluate = ImageDataGenerator(rescale=1/255)
+
         # Set image directories
         self.__generator_training = datagen_training.flow_from_directory(
             self.__dir_training,
             target_size=(150, 150),
-            class_mode='categorical')
+            class_mode='categorical'
+        )
         self.__generator_evaluate = datagen_evaluate.flow_from_directory(
             self.__dir_evaluate,
             target_size=(150, 150),
-            class_mode='categorical')
+            class_mode='categorical'
+        )
 
     def _model(self):
         self.__model = tf.keras.models.Sequential([
@@ -116,7 +119,9 @@ class Train():
             loss='categorical_crossentropy',
             optimizer='rmsprop',
             metrics=['accuracy'])
-        self.__model.summary()
+
+        if Log().verbosity == logging.DEBUG:
+            self.__model.summary()
 
     def save(self):
         """ Save model """
@@ -127,9 +132,14 @@ class Train():
         """ Run model """
         self._datagen()
         self._model()
+
+        verbose = False
+        if Log().verbosity == logging.DEBUG:
+            verbose = True
+
         history = self.__model.fit(
             self.__generator_training,
             epochs=self.epochs,
             validation_data=self.__generator_evaluate,
-            verbose=True)
+            verbose=verbose)
         return history

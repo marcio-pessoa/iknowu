@@ -33,12 +33,27 @@ class Log:
 
     @property
     def verbosity(self) -> int:
-        """ verbosity getter function
+        """ verbosity getter
 
         Returns:
             int: verbosity level
         """
         return self.__verbosity
+
+    @property
+    def tf_verbosity(self) -> int:
+        """ TensorFlow verbosity getter
+
+        Returns:
+            int: TensorFlow verbosity level
+        """
+        if self.__verbosity == logging.WARNING:
+            return 1
+        if self.__verbosity == logging.ERROR:
+            return 2
+        if self.__verbosity == logging.CRITICAL:
+            return 3
+        return 0
 
     @verbosity.setter
     def verbosity(self, level):
