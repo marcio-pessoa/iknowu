@@ -54,7 +54,6 @@ class IknowU():
             usage=(
                 f'{self.__name} <command> [<args>]\n\n'
                 'commands:\n'
-                '  obtain         Obtain data (import pictures)\n'
                 '  train          Train model\n'
                 '  infer          Do an infer\n\n'
             )
