@@ -13,16 +13,17 @@ import contextlib
 import numpy as np
 
 from tools.config import Config
+from tools.log import Log
 
 # 0 = all messages are logged (default behavior)
 # 1 = INFO messages are not printed
 # 2 = INFO and WARNING messages are not printed
 # 3 = INFO, WARNING, and ERROR messages are not printed
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = str(Log().tf_verbosity)
 
 with contextlib.redirect_stdout(None):
-    import tensorflow as tf  # pylint: disable=import-error
-    from keras_preprocessing import image  # pylint: disable=import-error
+    import tensorflow as tf
+    from keras_preprocessing import image
 
 
 class Infer():

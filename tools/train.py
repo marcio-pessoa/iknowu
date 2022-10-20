@@ -21,9 +21,9 @@ from tools.log import Log, logging
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = str(Log().tf_verbosity)
 
 with contextlib.redirect_stdout(None):
-    import tensorflow as tf  # pylint: disable=import-error
+    import tensorflow as tf
     from keras_preprocessing.image \
-        import ImageDataGenerator  # pylint: disable=import-error
+        import ImageDataGenerator
 
 
 class Train():
@@ -39,6 +39,7 @@ class Train():
         self.__generator_training = None
         self.__generator_evaluate = None
         self.epochs = 10
+
         self._config()
 
     def _config(self):
