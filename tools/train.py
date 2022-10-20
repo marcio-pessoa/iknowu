@@ -22,8 +22,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = str(Log().tf_verbosity)
 
 with contextlib.redirect_stdout(None):
     import tensorflow as tf
-    from keras_preprocessing.image \
-        import ImageDataGenerator
+    from keras_preprocessing.image import ImageDataGenerator
 
 
 class Train():
