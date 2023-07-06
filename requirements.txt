@@ -1,6 +1,6 @@
 Keras_Preprocessing==1.1.2
 numpy==1.24.1
 tensorflow==2.11.1
-SciPy==1.9.2
+SciPy==1.10.0
 pyyaml==6.0
 pandas==1.5.3
