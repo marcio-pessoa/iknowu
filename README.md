@@ -10,15 +10,26 @@ All notable changes to this project will be documented in [CHANGELOG.md](CHANGEL
 
 ### Cloning
 
-``` sh
+```sh
 git clone https://github.com/marcio-pessoa/iknowu
 ```
 
 ### Installing required Python modules
 
-``` sh
+```sh
+# Change to work directory
 cd iknowu
+```
 
+```sh
+# Create Python virtual environment
+python -m venv venv
+# Activate virtual environment
+source venv/bin/activate
+```
+
+```sh
+# Install requirements
 pip3 install -r requirements.txt
 ```
 
@@ -26,6 +37,6 @@ pip3 install -r requirements.txt
 
 ## To infer an image
 
-``` sh
+```sh
 ./iknowu.py infer -f infer/pedra.jpg
 ```
