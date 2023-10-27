@@ -4,3 +4,4 @@ tensorflow==2.15.0
 SciPy==1.10.0
 pyyaml==6.0
 pandas==1.5.3
+pillow==10.1.0
