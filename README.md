@@ -30,7 +30,7 @@ source venv/bin/activate
 
 ```sh
 # Install requirements
-pip3 install -r requirements.txt
+venv/bin/pip3 install -r requirements.txt
 ```
 
 ## Running
