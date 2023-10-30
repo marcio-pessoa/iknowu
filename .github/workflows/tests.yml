@@ -19,7 +19,7 @@ jobs:
         pip install -r test-requirements.txt
     - name: Code analysis with pylint
       run: |
-        pylint $(find . -name "*.py")
+        pylint *.py tools/*.py
   Flake8:
     runs-on: ubuntu-latest
     strategy:
