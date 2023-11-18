@@ -11,8 +11,8 @@ people:
 import os
 import contextlib
 
-from tools.config import Config
-from tools.log import Log, logging
+from src.config import Config
+from src.log import Log, logging
 
 # 0 = all messages are logged (default behavior)
 # 1 = INFO messages are not printed

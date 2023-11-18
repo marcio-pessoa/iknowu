@@ -15,8 +15,8 @@ import os
 import argparse
 from functools import wraps
 
-from tools.log import Log, log
-from tools.config import Config
+from src.log import Log, log
+from src.config import Config
 
 if not (sys.version_info.major == 3 and sys.version_info.minor >= 6):
     print("This program requires Python 3.6 or higher!")
@@ -124,9 +124,9 @@ class IknowU():
         args = parser.parse_args(sys.argv[2:])
         Log().verbosity = args.verbosity
         log.info('Running train...')
-        from tools.train \
+        from src.train \
             import Train  # pylint: disable=import-outside-toplevel
-        from tools.report \
+        from src.report \
             import Report  # pylint: disable=import-outside-toplevel
         train = Train()
         train.epochs = args.epochs
@@ -155,7 +155,7 @@ class IknowU():
         args = parser.parse_args(sys.argv[2:])
         Log().verbosity = args.verbosity
         log.info('Running infer...')
-        from tools.infer \
+        from src.infer \
             import Infer  # pylint: disable=import-outside-toplevel
         infer = Infer()
         infer.picture = args.file
