@@ -22,7 +22,7 @@ from src.log import Log
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = str(Log().tf_verbosity)
 
 with contextlib.redirect_stdout(None):
-    import tensorflow as tf
+    import keras
     from keras_preprocessing import image
 
 
@@ -36,7 +36,7 @@ class Infer():
         self.__picture_path = ''
         self.__picture = None
         self.__people = []
-        self.__model: tf.keras.models.Sequential
+        self.__model: keras.models.Sequential
         self._config()
 
     def _config(self):
@@ -78,7 +78,7 @@ class Infer():
 
     def _load_model(self):
         model_file_path = os.path.join(self.__directory, 'model.h5')
-        self.__model = tf.keras.models.load_model(model_file_path)
+        self.__model = keras.models.load_model(model_file_path)
 
     def _load_picture(self):
         picture_raw = image.load_img(
