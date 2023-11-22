@@ -52,7 +52,7 @@ class Train():
         directories = (self.__dir_training, self.__dir_evaluate)
         for i in directories:
             if not os.path.isdir(i):
-                raise Exception(f'Directory not found: {i}')
+                raise ValueError(f'Directory not found: {i}')
 
     def _datagen(self):
         # Set data generator

@@ -47,7 +47,7 @@ class Infer():
         )
 
         if not os.path.isdir(self.__directory):
-            raise Exception(f'Directory not found: {self.__directory}')
+            raise ValueError(f'Directory not found: {self.__directory}')
 
         for person in Config().get['person']:
             self.__people.append(person['nick'])
@@ -74,7 +74,7 @@ class Infer():
         """
         self.__picture_path = picture_path
         if not os.path.isfile(self.__picture_path):
-            raise Exception(f'File not found: {self.__picture_path}')
+            raise ValueError(f'File not found: {self.__picture_path}')
 
     def _load_model(self):
         model_file_path = os.path.join(self.__directory, 'model.h5')
