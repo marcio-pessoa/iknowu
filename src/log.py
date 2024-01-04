@@ -43,10 +43,10 @@ class Log:
 
     @property
     def tf_verbosity(self) -> int:
-        """ TensorFlow verbosity getter
+        """ verbosity getter
 
         Returns:
-            int: TensorFlow verbosity level
+            int: verbosity level
         """
         if self.__verbosity == logging.WARNING:
             return 1

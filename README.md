@@ -1,4 +1,4 @@
-# TensorFlow - IknowU
+# IknowU
 
 Machine Learning image categorisation
 

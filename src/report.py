@@ -1,7 +1,7 @@
 """
 ---
 name: report.py
-description: Create TensorFlow Model History report
+description: Create Model History report
 people:
   developers:
   - name: Marcio Pessoa
