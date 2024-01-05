@@ -93,7 +93,7 @@ class IknowU():
         @wraps(func)
         def wrapper(*args, **kwargs):
             Log().name = 'IknowU'
-            Log().verbosity = 'WARNING'
+            Log().verbosity = 'CRITICAL'
             Log().start()
             func(*args, **kwargs)
         return wrapper
@@ -120,7 +120,8 @@ class IknowU():
         parser.add_argument(
             '-v', '--verbosity',
             required=False,
-            help='DEBUG, INFO, WARNING, ERROR (default) or CRITICAL')
+            default='CRITICAL',
+            help='DEBUG, INFO, WARNING, ERROR or CRITICAL (default)')
         args = parser.parse_args(sys.argv[2:])
         Log().verbosity = args.verbosity
         log.info('Running train...')
@@ -151,7 +152,8 @@ class IknowU():
         parser.add_argument(
             '-v', '--verbosity',
             required=False,
-            help='DEBUG, INFO, WARNING, ERROR (default) or CRITICAL')
+            default='CRITICAL',
+            help='DEBUG, INFO, WARNING, ERROR or CRITICAL (default)')
         args = parser.parse_args(sys.argv[2:])
         Log().verbosity = args.verbosity
         log.info('Running infer...')
