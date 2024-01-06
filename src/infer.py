@@ -100,6 +100,7 @@ class Infer():
         """ Run infer """
         self._load_model()
         self._load_picture()
-        classes = self.__model.predict(self.__picture, batch_size=10)
+        classes = self.__model.predict(self.__picture, batch_size=10,
+                                       verbose=0)
         person = self._what_is_your_name(classes)
         return person
