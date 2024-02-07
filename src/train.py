@@ -125,7 +125,7 @@ class Train():
 
     def save(self):
         """ Save model """
-        model_file_path = os.path.join(self.__directory, 'model.h5')
+        model_file_path = os.path.join(self.__directory, 'model.keras')
         self.__model.save(model_file_path)
 
     def run(self):

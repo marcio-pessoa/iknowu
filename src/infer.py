@@ -77,7 +77,7 @@ class Infer():
             raise ValueError(f'File not found: {self.__picture_path}')
 
     def _load_model(self):
-        model_file_path = os.path.join(self.__directory, 'model.h5')
+        model_file_path = os.path.join(self.__directory, 'model.keras')
         self.__model = keras.models.load_model(model_file_path)
 
     def _load_picture(self):
