@@ -54,7 +54,7 @@ class IknowU():
             usage=(
                 f'{self.__name} <command> [<args>]\n\n'
                 'commands:\n'
-                '  train          Train model\n'
+                '  train          Train model (algo test)\n'
                 '  infer          Do an infer\n\n'
             )
         )
@@ -104,7 +104,7 @@ class IknowU():
         """ Train """
         parser = argparse.ArgumentParser(
             prog=f'{self.__name} train',
-            description='Train model')
+            description='Train model (algo test)')
         parser.add_argument(
             '-e', '--epochs',
             required=False,
